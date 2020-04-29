@@ -13,36 +13,33 @@ exports.takeScreenshot = async (browser, targetUrl, targetSelector) => {
     waitUntil: ['domcontentloaded', 'networkidle2'],
   });
 
-  let element = await page.$('body');
-  if (targetSelector) {
-    element = await page.$(targetSelector);
-  }
-
-  const {
-    x,
-    y,
-    width,
-    height,
-  } = await element.boundingBox();
-
   const name = crypto.randomBytes(20).toString('hex');
   const imagePath = `/tmp/screenshot-${name}.png`;
+  const screenshotOptions = { path: imagePath };
 
-  const timeout = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  if (targetSelector) {
+    const element = await page.$(targetSelector);
 
-  await timeout(2000);
+    const {
+      x,
+      y,
+      width,
+      height,
+    } = await element.boundingBox();
 
-  await page.screenshot({
-    path: imagePath,
-    clip: {
+    screenshotOptions.clip = {
       x: x + 2,
       y: y + 2,
       width: width - 2,
       height: height - 2,
-    },
-  });
+    };
+  } else {
+    screenshotOptions.fullPage = true;
+  }
 
+  const timeout = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  await timeout(2000);
+  await page.screenshot(screenshotOptions);
   const remoteImagePath = await uploadScreenshot(imagePath);
-
   return remoteImagePath;
 };

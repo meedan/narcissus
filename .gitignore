@@ -88,3 +88,6 @@ jspm_packages
 
 # Own config
 config.js
+
+# Vim
+*.sw*
