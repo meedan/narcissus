@@ -28,6 +28,10 @@ exports.takeScreenshot = async (browser, targetUrl, targetSelector) => {
   const name = crypto.randomBytes(20).toString('hex');
   const imagePath = `/tmp/screenshot-${name}.png`;
 
+  const timeout = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  await timeout(2000);
+
   await page.screenshot({
     path: imagePath,
     clip: {

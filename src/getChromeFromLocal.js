@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 
 const getChromeFromLocal = async () => {
   const chrome = await puppeteer.launch({
-    headless: false,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
     slowMo: process.env.SLOWMO_MS,
     dumpio: true,
   });
