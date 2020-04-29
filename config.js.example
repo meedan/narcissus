@@ -1,0 +1,10 @@
+const config = {
+  s3: {
+    endpoint:
+    access_key:
+    secret_key:
+    bucket:
+    bucket_region:
+  },
+};
+module.exports = config;

@@ -83,5 +83,8 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 
-# serverless
+# Serverless
 .serverless
+
+# Own config
+config.js

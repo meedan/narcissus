@@ -1,73 +1,45 @@
-// const setup = require("./starter-kit/setup");
-const getChrome = require("./getChrome");
-const puppeteer = require("puppeteer-core");
+const puppeteer = require('puppeteer-core');
+const getChromeFromLambda = require('./getChromeFromLambda');
+const getChromeFromLocal = require('./getChromeFromLocal');
 
-const { optimizeImage } = require("./optimizeImage");
-const { screenshotCode } = require("./screenshotCode.js");
-const { takeScreenshot } = require("./takeScreenshot.js");
-
-function response(statusCode, body) {
-    const headers = {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "access-control-allow-methods": "GET"
-    };
-
-    return {
-        statusCode,
-        headers,
-        body
-    };
-}
+const { takeScreenshot } = require('./takeScreenshot.js');
 
 exports.handler = async (event, context, callback) => {
-    // // For keeping the browser launch
-    context.callbackWaitsForEmptyEventLoop = false;
-    const chrome = await getChrome();
+  const contextRef = context;
+  if (contextRef) {
+    contextRef.callbackWaitsForEmptyEventLoop = false;
+  }
+  let browser = null;
 
-    console.log("got chrome");
-    console.log(chrome);
+  if (!event.queryStringParameters) {
+    return callback(400, 'You need a URL');
+  }
 
-    const browser = await puppeteer.connect({
-        browserWSEndpoint: chrome.endpoint
+  const targetUrl = event.queryStringParameters.url;
+  const targetSelector = event.queryStringParameters.selector;
+
+  if (!targetUrl) {
+    return callback(400, 'You need a URL');
+  }
+
+  if (process.env.RUNNING_LOCALLY) {
+    browser = await getChromeFromLocal();
+  } else {
+    const chrome = await getChromeFromLambda();
+    browser = await puppeteer.connect({
+      browserWSEndpoint: chrome.endpoint,
     });
+  }
 
-    console.log("got browser");
-
-    if (!event.queryStringParameters) {
-        return response(400, "You need a url");
+  try {
+    const result = await takeScreenshot(browser, targetUrl, targetSelector);
+    return callback(200, result);
+  } catch (e) {
+    console.error(e.message);
+    return callback(500, 'Error 500, please check the logs');
+  } finally {
+    if (process.env.RUNNING_LOCALLY) {
+      await browser.close();
     }
-
-    const targetUrl = event.queryStringParameters.url;
-    const code = event.queryStringParameters.code;
-    const codeType = event.queryStringParameters.codeType;
-    const urlencoded = event.queryStringParameters.urlencoded === "true";
-
-    if (!targetUrl && !code) {
-        return response(400, "You need something to do");
-    }
-
-    try {
-        let result = null;
-
-        switch (event.queryStringParameters.type) {
-            case "image":
-                result = await optimizeImage(targetUrl);
-                break;
-            case "code":
-                result = await screenshotCode({
-                    browser,
-                    code,
-                    codeType,
-                    urlencoded
-                });
-                break;
-            default:
-                result = await takeScreenshot(browser, targetUrl);
-        }
-
-        return response(200, result);
-    } catch (e) {
-        return response(500, e);
-    }
+  }
 };
