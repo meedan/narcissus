@@ -4,7 +4,7 @@ Run Headless-Chrome by [Puppeteer](https://github.com/GoogleChrome/puppeteer) on
 
 ## Configuration
 
-Copy `config.js.example` to `src/config.js` and adjust the configurations.
+Copy `src/config.js.example` to `src/config.js` and adjust the configurations.
 
 ## Running locally
 
