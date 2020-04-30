@@ -1,5 +1,9 @@
 # Narcissus
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/5247e8bc16825ce83d18/maintainability)](https://codeclimate.com/repos/5eab57cb05cace00cc00027c/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/5247e8bc16825ce83d18/test_coverage)](https://codeclimate.com/repos/5eab57cb05cace00cc00027c/test_coverage)
+[![Build Status](https://travis-ci.org/meedan/narcissus.svg?branch=develop)](https://travis-ci.org/meedan/narcissus)
+
 Run Headless-Chrome by [Puppeteer](https://github.com/GoogleChrome/puppeteer) on AWS Lambda to take screenshots.
 
 ## Configuration
