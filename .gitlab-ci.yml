@@ -20,7 +20,7 @@ deploy_qa:
   only:
     - develop
   script:
-    - apt-get install git -y
+    - apk add --no-cache git
     - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
     - cp configurator/check/qa/narcissus/src/config.js src/
     - npm run deploy
