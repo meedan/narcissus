@@ -22,5 +22,5 @@ deploy_qa:
   script:
     - apt-get install git -y
     - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-    - cp configurator/qa/narcissus/src/config.js src/
+    - cp configurator/check/qa/narcissus/src/config.js src/
     - npm run deploy
