@@ -23,6 +23,6 @@
     "lint": "./node_modules/.bin/eslint src",
     "babel": "rm -rf dist && mkdir dist && ./node_modules/.bin/babel src --out-dir dist",
     "local": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false npm install && npm run lint && npm run babel && cp -r node_modules dist && SLOWMO_MS=250 RUNNING_LOCALLY=true node dist/local.js",
-    "deploy": "npm run clean && npm i && SLS_DEBUG='*' sls deploy --stage production --verbose"
+    "deploy": "npm run clean && npm i && SLS_DEBUG='*' sls deploy --stage production --verbose --force"
   }
 }
