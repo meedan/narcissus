@@ -5,13 +5,14 @@ const config = require('./config');
 
 exports.uploadScreenshot = async (path) => (
   new Promise((resolve) => {
+    const s3ForcePathStyle = Object.keys(config.s3).indexOf('path_style') === -1 ? true : config.s3.path_style;
     const s3 = new aws.S3({
       accessKeyId: config.s3.access_key,
       secretAccessKey: config.s3.secret_key,
       endpoint: config.s3.endpoint,
       region: config.s3.bucket_region,
       signatureVersion: 'v4',
-      s3ForcePathStyle: true,
+      s3ForcePathStyle,
     });
 
     (async () => {

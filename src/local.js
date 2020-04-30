@@ -11,16 +11,22 @@ app.get('/', (request, response) => {
     const requestRef = request;
     requestRef.queryStringParameters = request.query;
     lambda(request, null, (status, message) => {
-      response.status(status).send(message);
+      const output = {};
+      if (status === 200) {
+        output.url = message;
+      } else {
+        output.error = message;
+      }
+      response.status(status).send(JSON.stringify(output));
     }).then(() => {
       response.end();
     }, (error) => {
       console.error(error.message);
-      response.status(500).send('Error 500, please check the logs');
+      response.status(500).send(JSON.stringify({ error: 'Error 500, please check the logs' }));
     });
   } catch (e) {
     console.error(e.message);
-    response.status(500).send('Error 500, please check the logs');
+    response.status(500).send(JSON.stringify({ error: 'Error 500, please check the logs' }));
   }
 });
 

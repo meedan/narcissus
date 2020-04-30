@@ -1,0 +1,25 @@
+image: node:latest
+
+stages:
+  - deploy
+
+deploy_qa:
+  stage: deploy
+  before_script:
+    - npm config set prefix /usr/local
+    - npm install -g serverless
+  tags:
+    - meedan
+  environment: production
+  variables:
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+    GITHUB_TOKEN: $GITHUB_TOKEN
+    ENV: qa
+  only:
+    - develop
+  script:
+    - apk add --no-cache git
+    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
+    - cp configurator/qa/narcissus/src/config.js src/
+    - npm run deploy

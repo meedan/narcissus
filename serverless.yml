@@ -1,0 +1,22 @@
+service: narcissus-${env:ENV}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 2536
+  timeout: 180
+
+functions:
+  narcissus:
+    handler: src/index.handler
+    environment:
+      DEBUG: 0
+    events:
+      - http:
+          path: narcissus-${env:ENV}
+          method: GET
+          cors: true
+
+package:
+  exclude:
+    - node_modules/puppeteer/.local-chromium/**
