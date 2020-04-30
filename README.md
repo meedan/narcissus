@@ -1,4 +1,4 @@
-# Run Headless-Chrome by Puppeteer on AWS Lambda to take screenshots
+# Narcissus
 
 Run Headless-Chrome by [Puppeteer](https://github.com/GoogleChrome/puppeteer) on AWS Lambda to take screenshots.
 
@@ -8,4 +8,13 @@ Copy `src/config.js.example` to `src/config.js` and adjust the configurations.
 
 ## Running locally
 
-By executing `npm run local`, you can check the operation while actually viewing the browser.
+Just run `npm run local`, or use the Docker image.
+
+## Running on AWS Lambda
+
+Use Serverless by running `npm run deploy`.
+
+## TODO
+
+* Compress images
+* Implement automated tests
