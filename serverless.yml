@@ -20,3 +20,4 @@ functions:
 package:
   exclude:
     - node_modules/puppeteer/.local-chromium/**
+    - src/test.js

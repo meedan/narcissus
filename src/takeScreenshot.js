@@ -40,6 +40,6 @@ exports.takeScreenshot = async (browser, targetUrl, targetSelector) => {
   const timeout = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   await timeout(2000);
   await page.screenshot(screenshotOptions);
-  const remoteImagePath = await uploadScreenshot(imagePath);
+  const remoteImagePath = await uploadScreenshot(name, imagePath);
   return remoteImagePath;
 };

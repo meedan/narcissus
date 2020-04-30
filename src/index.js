@@ -3,8 +3,9 @@ const getChromeFromLocal = require('./getChromeFromLocal');
 const { takeScreenshot } = require('./takeScreenshot.js');
 
 exports.handler = async (event, context, callback) => {
+  const contextRef = context || {};
   let callbackRef = callback;
-  if (!process.env.RUNNING_LOCALLY) {
+  if (!contextRef.runningLocally) {
     callbackRef = (statusCode, message) => {
       const body = {};
       if (statusCode === 200) {
@@ -32,7 +33,7 @@ exports.handler = async (event, context, callback) => {
     return callbackRef(400, 'You need a URL');
   }
 
-  if (process.env.RUNNING_LOCALLY) {
+  if (contextRef.runningLocally) {
     browser = await getChromeFromLocal();
   } else {
     browser = await getChromeFromLambda();
@@ -42,7 +43,7 @@ exports.handler = async (event, context, callback) => {
     const result = await takeScreenshot(browser, targetUrl, targetSelector);
     return callbackRef(200, result);
   } catch (e) {
-    console.error(e.message);
+    console.debug(e.message);
     return callbackRef(500, 'Error 500, please check the logs');
   } finally {
     await browser.close();

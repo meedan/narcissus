@@ -6,11 +6,16 @@ const port = process.env.SERVER_PORT || 8687;
 
 app.use(express.json());
 
+const handleError = (e, response) => {
+  console.debug(e.message);
+  response.status(500).send(JSON.stringify({ error: 'Error 500, please check the logs' }));
+};
+
 app.get('/', (request, response) => {
   try {
     const requestRef = request;
     requestRef.queryStringParameters = request.query;
-    lambda(request, null, (status, message) => {
+    lambda(request, { runningLocally: true }, (status, message) => {
       const output = {};
       if (status === 200) {
         output.url = message;
@@ -20,15 +25,13 @@ app.get('/', (request, response) => {
       response.status(status).send(JSON.stringify(output));
     }).then(() => {
       response.end();
-    }, (error) => {
-      console.error(error.message);
-      response.status(500).send(JSON.stringify({ error: 'Error 500, please check the logs' }));
+    }, (e) => {
+      handleError(e, response);
     });
   } catch (e) {
-    console.error(e.message);
-    response.status(500).send(JSON.stringify({ error: 'Error 500, please check the logs' }));
+    handleError(e, response);
   }
 });
 
-console.log(`Starting screenshot service on port ${port}`);
+console.debug(`Starting screenshot service on port ${port}`);
 app.listen(port);

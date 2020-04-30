@@ -14,7 +14,10 @@ Just run `npm run local`, or use the Docker image.
 
 Use Serverless by running `npm run deploy`.
 
+## Running tests
+
+Just run `npm run test`.
+
 ## TODO
 
 * Compress images
-* Implement automated tests
