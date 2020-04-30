@@ -29,7 +29,7 @@ exports.uploadScreenshot = async (path) => (
       const { Location } = await s3
         .upload({
           Bucket: config.s3.bucket,
-          Key: `screenshot-${name}.png`,
+          Key: `narcissus/screenshot-${name}.png`,
           Body: buffer,
           ACL: 'public-read',
           ContentType: 'image/png',
