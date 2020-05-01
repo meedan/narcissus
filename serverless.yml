@@ -5,6 +5,8 @@ provider:
   runtime: nodejs12.x
   memorySize: 2536
   timeout: 180
+  apiKeys:
+    - value: ${env:API_KEY}
 
 functions:
   narcissus:
@@ -16,6 +18,7 @@ functions:
           path: narcissus-${env:ENV}
           method: GET
           cors: true
+          private: true
 
 package:
   exclude:
