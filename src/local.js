@@ -13,21 +13,25 @@ const handleError = (e, response) => {
 
 app.get('/', (request, response) => {
   try {
-    const requestRef = request;
-    requestRef.queryStringParameters = request.query;
-    lambda(request, { runningLocally: true }, (status, message) => {
-      const output = {};
-      if (status === 200) {
-        output.url = message;
-      } else {
-        output.error = message;
-      }
-      response.status(status).send(JSON.stringify(output));
-    }).then(() => {
-      response.end();
-    }, (e) => {
-      handleError(e, response);
-    });
+    if (request.headers['x-api-key'] !== 'dev') {
+      response.status(403).send('Please provide the API key');
+    } else {
+      const requestRef = request;
+      requestRef.queryStringParameters = request.query;
+      lambda(request, { runningLocally: true }, (status, message) => {
+        const output = {};
+        if (status === 200) {
+          output.url = message;
+        } else {
+          output.error = message;
+        }
+        response.status(status).send(JSON.stringify(output));
+      }).then(() => {
+        response.end();
+      }, (e) => {
+        handleError(e, response);
+      });
+    }
   } catch (e) {
     handleError(e, response);
   }
