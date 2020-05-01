@@ -18,6 +18,7 @@ functions:
           path: narcissus-${env:ENV}
           method: GET
           cors: true
+          private: true
 
 package:
   exclude:
