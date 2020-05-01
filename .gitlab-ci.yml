@@ -15,7 +15,7 @@ deploy_qa:
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
     GITHUB_TOKEN: $GITHUB_TOKEN
-    API_KEY: $API_KEY
+    API_KEY: $API_KEY_QA
     ENV: qa
   only:
     - develop
@@ -37,7 +37,7 @@ deploy_live:
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
     GITHUB_TOKEN: $GITHUB_TOKEN
-    API_KEY: $API_KEY
+    API_KEY: $API_KEY_LIVE
     ENV: live
   only:
     - master
