@@ -3,6 +3,7 @@ let puppeteer = require('puppeteer-core');
 const index = require('./index');
 const config = require('./config');
 const getChromeFromLocal = require('./getChromeFromLocal');
+const about = require('./about');
 
 jest.setTimeout(120000);
 
@@ -81,5 +82,10 @@ test('should use default callback', async () => {
   puppeteer.launch = (params) => (browser);
   const e = { queryStringParameters: { url: 'https://ca.ios.ba/', selector: '#avatar' } };
   const response = await index.handler(e, { runningLocally: false }, callback);
+  expect(response.statusCode).toBe(200);
+});
+
+test('should information about the service', async () => {
+  const response = await about.handler();
   expect(response.statusCode).toBe(200);
 });

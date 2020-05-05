@@ -19,6 +19,16 @@ functions:
           method: GET
           cors: true
           private: true
+  narcissusAbout:
+    handler: src/about.handler
+    environment:
+      DEBUG: 0
+    events:
+      - http:
+          path: narcissus-${env:ENV}/about
+          method: GET
+          cors: true
+          private: true
 
 package:
   exclude:

@@ -1,5 +1,6 @@
 const express = require('express');
 const lambda = require('./index').handler;
+const about = require('./about').handler;
 
 const app = express();
 const port = process.env.SERVER_PORT || 8687;
@@ -11,9 +12,21 @@ const handleError = (e, response) => {
   response.status(500).send(JSON.stringify({ error: 'Error 500, please check the logs' }));
 };
 
+const invalidRequest = (request) => (request.headers['x-api-key'] !== 'dev');
+
+app.get('/about', (request, response) => {
+  if (invalidRequest(request)) {
+    response.status(403).send('Please provide the API key');
+  } else {
+    about().then((aboutResponse) => {
+      response.status(aboutResponse.statusCode).send(aboutResponse.body);
+    });
+  }
+});
+
 app.get('/', (request, response) => {
   try {
-    if (request.headers['x-api-key'] !== 'dev') {
+    if (invalidRequest(request)) {
       response.status(403).send('Please provide the API key');
     } else {
       const requestRef = request;
