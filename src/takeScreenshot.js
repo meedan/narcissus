@@ -6,7 +6,6 @@ exports.takeScreenshot = async (browser, targetUrl, targetSelector) => {
   await page.setViewport({
     width: 1920,
     height: 1080,
-    isMobile: true,
   });
 
   await page.goto(targetUrl, {
@@ -28,10 +27,10 @@ exports.takeScreenshot = async (browser, targetUrl, targetSelector) => {
     } = await element.boundingBox();
 
     screenshotOptions.clip = {
-      x: x + 2,
-      y: y + 2,
-      width: width - 2,
-      height: height - 2,
+      x,
+      y,
+      width,
+      height,
     };
   } else {
     screenshotOptions.fullPage = true;
