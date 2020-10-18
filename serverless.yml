@@ -1,9 +1,11 @@
 service: narcissus-${env:ENV}
 
+frameworkVersion: ">=2.4.0"
+
 provider:
   name: aws
   runtime: nodejs12.x
-  memorySize: 2536
+  memorySize: 2560
   timeout: 180
   apiKeys:
     - value: ${env:API_KEY}
@@ -12,7 +14,7 @@ functions:
   narcissus:
     handler: src/index.handler
     environment:
-      DEBUG: 0
+      DEBUG: "0"
     events:
       - http:
           path: narcissus-${env:ENV}
@@ -22,7 +24,7 @@ functions:
   narcissusAbout:
     handler: src/about.handler
     environment:
-      DEBUG: 0
+      DEBUG: "0"
     events:
       - http:
           path: narcissus-${env:ENV}/about

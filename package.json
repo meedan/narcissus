@@ -1,32 +1,48 @@
 {
+  "private": false,
   "name": "narcissus",
-  "version": "0.0.1",
   "description": "Take screenshots using Headless-Chrome by Puppeteer",
+  "license": "MIT",
+  "author": "Meedan",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/meedan/narcissus.git"
+  },
+  "version": "0.0.2",
+  "scripts": {
+    "babel": "rm -rf dist && mkdir dist && ./node_modules/.bin/babel src --out-dir dist",
+    "clean": "rm -rf .build dist .serverless node_modules/*",
+    "deploy": "npm run clean && npm i && SLS_DEBUG='*' sls deploy --stage production --verbose --force --conceal",
+    "lint": "./node_modules/.bin/eslint src",
+    "local": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false npm install && npm run lint && npm run babel && cp -r node_modules dist && SLOWMO_MS=250 node dist/local.js",
+    "test": "jest --coverage src"
+  },
   "dependencies": {
-    "aws-sdk": "^2.358.0",
-    "chrome-aws-lambda": "^2.1.1",
+    "aws-sdk": "^2.766.0",
+    "chrome-aws-lambda": "^5.3.1",
     "express": "^4.17.1",
-    "puppeteer": "^3.0.2",
-    "puppeteer-core": "^1.14.0",
-    "tar": "^4.0.1",
+    "puppeteer": "^5.3.1",
+    "puppeteer-core": "^5.3.1",
+    "tar": "^6.0.5",
     "url": "^0.11.0"
   },
   "devDependencies": {
     "aws-sdk-mock": "^5.1.0",
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.2",
-    "jest": "^25.5.2",
-    "braces": ">=2.3.1"
+    "babel-preset-env": "^1.7.0",
+    "braces": ">=3.0.2",
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "jest": "^26.4.2"
   },
-  "scripts": {
-    "clean": "rm -rf .build dist .serverless node_modules/*",
-    "lint": "./node_modules/.bin/eslint src",
-    "babel": "rm -rf dist && mkdir dist && ./node_modules/.bin/babel src --out-dir dist",
-    "test": "jest --coverage src",
-    "local": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false npm install && npm run lint && npm run babel && cp -r node_modules dist && SLOWMO_MS=250 node dist/local.js",
-    "deploy": "npm run clean && npm i && SLS_DEBUG='*' sls deploy --stage production --verbose --force --conceal"
-  }
+  "keywords": [
+    "aws",
+    "aws-lambda",
+    "puppeteer",
+    "puppeteer-screenshot",
+    "screenshot",
+    "serverless",
+    "serverless-framework"
+  ]
 }
