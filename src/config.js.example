@@ -1,10 +1,8 @@
 const config = {
-  s3: {
-    endpoint: 'http://minio:9000',
-    access_key: 'AKIAIOSFODNN7EXAMPLE',
-    secret_key: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
-    bucket: 'check-api-dev',
-    bucket_region: 'us-east-1',
-  },
+  s3_endpoint: 'http://minio:9000',
+  s3_access_key: 'AKIAIOSFODNN7EXAMPLE',
+  s3_secret_key: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
+  s3_bucket: 'check-api-dev',
+  s3_bucket_region: 'us-east-1',
 };
 module.exports = config;

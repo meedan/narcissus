@@ -1,15 +1,15 @@
 const aws = require('aws-sdk');
 const fs = require('fs');
-const config = require('./config');
+const narcissusConfig = require('./narcissusConfig');
 
 exports.uploadScreenshot = async (name, path) => (
   new Promise((resolve) => {
-    const s3ForcePathStyle = Object.keys(config.s3).indexOf('path_style') === -1 ? true : config.s3.path_style;
+    const s3ForcePathStyle = narcissusConfig.get('s3_path_style', true);
     const s3 = new aws.S3({
-      accessKeyId: config.s3.access_key,
-      secretAccessKey: config.s3.secret_key,
-      endpoint: config.s3.endpoint,
-      region: config.s3.bucket_region,
+      accessKeyId: narcissusConfig.get('s3_access_key'),
+      secretAccessKey: narcissusConfig.get('s3_secret_key'),
+      endpoint: narcissusConfig.get('s3_endpoint'),
+      region: narcissusConfig.get('s3_bucket_region'),
       signatureVersion: 'v4',
       s3ForcePathStyle,
     });
@@ -23,7 +23,7 @@ exports.uploadScreenshot = async (name, path) => (
 
       const { Location } = await s3
         .upload({
-          Bucket: config.s3.bucket,
+          Bucket: narcissusConfig.get('s3_bucket'),
           Key: `narcissus/screenshot-${name}.png`,
           Body: buffer,
           ACL: 'public-read',

@@ -1,9 +1,10 @@
 const AWS = require('aws-sdk-mock');
 let puppeteer = require('puppeteer-core');
 const index = require('./index');
-const config = require('./config');
 const getChromeFromLocal = require('./getChromeFromLocal');
 const about = require('./about');
+const config = require('./config');
+const narcissusConfig = require('./narcissusConfig');
 
 jest.setTimeout(120000);
 
@@ -16,26 +17,24 @@ AWS.mock('S3', 'upload', (params, callback) => (
   })
 ));
 
-config.s3 = {
-  endpoint: 'test',
-  access_key: 'test',
-  secret_key: 'test',
-  bucket: 'test',
-  bucket_region: 'test',
-};
+Object.assign(config, {
+  s3_endpoint: 'test',
+  s3_access_key: 'test',
+  s3_secret_key: 'test',
+  s3_bucket: 'test',
+  s3_bucket_region: 'test',
+});
 
 const callback = (status, message) => ({ status, message });
 
 test('should have a valid config', () => {
   expect(config).toEqual(
     expect.objectContaining({
-      s3: {
-        endpoint: expect.any(String),
-        access_key: expect.any(String),
-        secret_key: expect.any(String),
-        bucket: expect.any(String),
-        bucket_region: expect.any(String),
-      },
+      s3_endpoint: expect.any(String),
+      s3_access_key: expect.any(String),
+      s3_secret_key: expect.any(String),
+      s3_bucket: expect.any(String),
+      s3_bucket_region: expect.any(String),
     })
   );
 });
@@ -63,7 +62,7 @@ test('should take screenshot with selector', async () => {
 });
 
 test('should take full page screenshot', async () => {
-  config.s3.path_style = false;
+  config.s3_path_style = false;
   const e = { queryStringParameters: { url: 'https://ca.ios.ba/slack' } };
   const response = await index.handler(e, { runningLocally: true }, callback);
   expect(response.status).toBe(200);
@@ -88,4 +87,14 @@ test('should use default callback', async () => {
 test('should information about the service', async () => {
   const response = await about.handler();
   expect(response.statusCode).toBe(200);
+});
+
+test('should get configuration from environment if available', async () => {
+  const OLD_ENV = process.env;
+  expect(narcissusConfig.get('s3_endpoint')).toBe('test');
+  process.env.s3_endpoint = 'test-2';
+  expect(narcissusConfig.get('s3_endpoint')).toBe('test-2');
+  expect(narcissusConfig.get('not_defined')).toBe(undefined);
+  expect(narcissusConfig.get('not_defined', 'default')).toBe('default');
+  process.env = OLD_ENV;
 });
