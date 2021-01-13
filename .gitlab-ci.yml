@@ -19,6 +19,7 @@ deploy_qa:
     ENV: qa
   only:
     - develop
+    - ssm-env-config
   script:
     - apk add --no-cache git
     - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
