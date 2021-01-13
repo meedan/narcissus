@@ -12,7 +12,12 @@ provider:
   iamRoleStatements:
     - Effect: "Allow"
       Action: 
+      - "ssm:DescribeParameters"
+      Resource: "*"
+    - Effect: "Allow"
+      Action: 
       - "ssm:GetParameters"
+      - "ssm:GetParameter"
       Resource: "*"
 
 functions:
