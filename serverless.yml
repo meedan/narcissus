@@ -9,6 +9,11 @@ provider:
   timeout: 180
   apiKeys:
     - value: ${env:API_KEY}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: 
+      - "ssm:GetParameters"
+      Resource: "*"
 
 functions:
   narcissus:
