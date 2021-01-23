@@ -15,7 +15,10 @@
     "deploy": "npm run clean && npm i && SLS_DEBUG='*' sls deploy --stage production --verbose --force --conceal",
     "lint": "./node_modules/.bin/eslint src",
     "local": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false npm install && npm run lint && npm run babel && cp -r node_modules dist && SLOWMO_MS=250 node dist/local.js",
-    "test": "jest --coverage src"
+    "test": "jest --coverage src",
+    "cov:before": "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter && chmod +x cc-test-reporter && ./cc-test-reporter before-build",
+    "cov:after": "./cc-test-reporter after-build --exit-code 0 -t lcov",
+    "test:coverage": "npm run cov:before && cp src/config.js.example src/config.js && npm run lint && npm run babel && npm run test && npm run cov:after"
   },
   "dependencies": {
     "aws-sdk": "^2.766.0",
