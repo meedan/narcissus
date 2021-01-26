@@ -19,10 +19,12 @@ jobs:
         GIT_COMMIT_SHA: ${{ github.sha }}
       run: make test
 
-    - uses: 8398a7/action-slack@v3
+    - name: Notify Slack
+      id: slack-notify
+      uses: 8398a7/action-slack@v3
+      if: ${{ always() }}
       with:
         status: custom
-        if: ${{ always() }}
         fields: workflow,job,commit,repo,ref,author,took,message
         custom_payload: |
           {
