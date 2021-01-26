@@ -12,7 +12,7 @@ Copy `src/config.js.example` to `src/config.js` and adjust the configurations.
 
 ## Running locally
 
-Just run `npm run local`, or use the Docker image.
+Just run `npm run local`, or `make run` to run in a Docker image.
 
 ## Running on AWS Lambda
 
@@ -20,7 +20,7 @@ Use Serverless by running `npm run deploy`.
 
 ## Running tests
 
-Just run `npm run test`.
+Just run `npm run test` or `make test` to run in a Docker image.
 
 ## TODO
 

@@ -2,7 +2,6 @@
 
 # Expects following environment variables to be populated:
 #   DEPLOY_ENV
-#   CC_TEST_REPORTER_ID
 
 set -e
 # check that required environment variables are set
@@ -22,6 +21,7 @@ if [[ "${DEPLOY_ENV}" == "travis" || "${DEPLOY_ENV}" == "test" ]]; then
 
 else
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false npm install
+  cp src/config.js.example src/config.js
   npm run lint
   npm run babel
   cp -r node_modules dist

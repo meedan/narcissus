@@ -1,7 +1,7 @@
 SHELL := /bin/sh
 
 build.local:
-	docker build narcissus
+	docker build . -t narcissus
 
 build.test:
 	docker-compose build narcissus
@@ -14,10 +14,11 @@ test: build.test
 
 
 run.local: build
-	DEPLOY_ENV=local docker up narcissus
+	docker run -e DEPLOY_ENV=local -t narcissus
 
 run.prod: build
-	DEPLOY_ENV=${DEPLOY_ENV} docker up
+	docker run -e DEPLOY_ENV -t narcissus
+
 
 run: run.local
 
