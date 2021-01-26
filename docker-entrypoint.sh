@@ -2,7 +2,7 @@
 
 # Expects following environment variables to be populated:
 #   DEPLOY_ENV
-#   APP
+#   CC_TEST_REPORTER_ID
 
 set -e
 # check that required environment variables are set
@@ -18,7 +18,7 @@ if [[ "${DEPLOY_ENV}" == "travis" || "${DEPLOY_ENV}" == "test" ]]; then
   npm run lint
   npm run babel
   npm run test
-  #npm run cov:after
+  npm run cov:after
 
 else
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false npm install

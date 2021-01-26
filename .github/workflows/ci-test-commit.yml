@@ -1,0 +1,20 @@
+name: Build and Run Test
+
+on:
+  push:
+    branches-ignore:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run Tests
+      id: run-tests
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        GIT_COMMIT_SHA: ${{ github.sha }}
+      run: make test
