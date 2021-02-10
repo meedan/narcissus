@@ -12,12 +12,16 @@ fi
 echo "Running application in [${DEPLOY_ENV}] environment"
 
 if [[ "${DEPLOY_ENV}" == "travis" || "${DEPLOY_ENV}" == "test" ]]; then
-  npm run cov:before
+  if [[ -n ${CC_TEST_REPORTER_ID+x} ]]; then
+    npm run cov:before
+  fi
   cp src/config.js.example src/config.js
   npm run lint
   npm run babel
   npm run test
-  npm run cov:after
+  if [[ -n ${CC_TEST_REPORTER_ID+x} ]]; then
+    npm run cov:after
+  fi
 
 else
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false npm install
