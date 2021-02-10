@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  narcissus:
+    build: .
+    ports:
+        - 8687:8687
+    build:
+      context: .
+    environment:
+      - DEPLOY_ENV
+      - CC_TEST_REPORTER_ID
