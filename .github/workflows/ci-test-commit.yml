@@ -1,9 +1,7 @@
 name: Build and Run Test
 
 on:
-  push:
-    branches-ignore:
-      - develop
+  push
 
 jobs:
   test:
