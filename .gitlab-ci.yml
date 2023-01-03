@@ -17,6 +17,7 @@ deploy_qa:
     GITHUB_TOKEN: $GITHUB_TOKEN
     API_KEY: $API_KEY_QA
     DEPLOY_ENV: qa
+    CONFIG_JS: $QA_CONFIG_JS
   only:
     - develop
   script:
@@ -38,6 +39,7 @@ deploy_live:
     GITHUB_TOKEN: $GITHUB_TOKEN
     API_KEY: $API_KEY_LIVE
     DEPLOY_ENV: live
+    CONFIG_JS: $LIVE_CONFIG_JS
   only:
     - master
   script:
