@@ -20,6 +20,7 @@ deploy_qa:
     CONFIG_JS: $QA_CONFIG_JS
   only:
     - develop
+    - debug-deploy-ssm
   script:
     - apk add --no-cache git
     - npm run deploy
