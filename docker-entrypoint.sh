@@ -38,7 +38,6 @@ else
       mv $WORKTMP src/config.js
       sha1sum src/config.js
     fi
-
   fi
   npm run lint
   npm run babel
