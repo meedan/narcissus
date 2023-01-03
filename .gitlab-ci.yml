@@ -22,7 +22,6 @@ deploy_qa:
     - develop
   script:
     - apk add --no-cache git
-    - #cp configurator/check/qa/narcissus/src/config.js src/
     - npm run deploy
 
 deploy_live:
@@ -44,5 +43,4 @@ deploy_live:
     - master
   script:
     - apk add --no-cache git
-    - #cp configurator/check/live/narcissus/src/config.js src/
     - npm run deploy
