@@ -17,12 +17,11 @@ deploy_qa:
     GITHUB_TOKEN: $GITHUB_TOKEN
     API_KEY: $API_KEY_QA
     DEPLOY_ENV: qa
+    CONFIG_JS: $QA_CONFIG_JS
   only:
     - develop
   script:
     - apk add --no-cache git
-    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-    - cp configurator/check/qa/narcissus/src/config.js src/
     - npm run deploy
 
 deploy_live:
@@ -39,10 +38,9 @@ deploy_live:
     GITHUB_TOKEN: $GITHUB_TOKEN
     API_KEY: $API_KEY_LIVE
     DEPLOY_ENV: live
+    CONFIG_JS: $LIVE_CONFIG_JS
   only:
     - master
   script:
     - apk add --no-cache git
-    - git clone https://${GITHUB_TOKEN}:x-oauth-basic@github.com/meedan/configurator ./configurator
-    - cp configurator/check/live/narcissus/src/config.js src/
     - npm run deploy
