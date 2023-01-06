@@ -8,6 +8,7 @@ deploy_qa:
   before_script:
     - npm config set prefix /usr/local
     - npm install -g serverless
+    - npm update -g serverless
   tags:
     - meedan
     - meedan-labs
