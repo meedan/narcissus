@@ -15,11 +15,11 @@ functions:
     handler: src/index.handler
     environment:
       DEBUG: "0"
-      s3_access_key: ${ssm.eu-west-1:/${env:DEPLOY_ENV}/narcissus/s3_access_key}
-      s3_secret_key: ${ssm.eu-west-1:/${env:DEPLOY_ENV}/narcissus/s3_secret_key~true}
-      s3_bucket: ${ssm.eu-west-1:/${env:DEPLOY_ENV}/narcissus/s3_bucket}
-      s3_endpoint: ${ssm.eu-west-1:/${env:DEPLOY_ENV}/narcissus/s3_endpoint}
-      s3_region: ${ssm.eu-west-1:/${env:DEPLOY_ENV}/narcissus/s3_region}
+      s3_access_key: ${ssm(eu-west-1):/${env:DEPLOY_ENV}/narcissus/s3_access_key}
+      s3_secret_key: ${ssm(eu-west-1):/${env:DEPLOY_ENV}/narcissus/s3_secret_key~true}
+      s3_bucket: ${ssm(eu-west-1):/${env:DEPLOY_ENV}/narcissus/s3_bucket}
+      s3_endpoint: ${ssm(eu-west-1):/${env:DEPLOY_ENV}/narcissus/s3_endpoint}
+      s3_region: ${ssm(eu-west-1):/${env:DEPLOY_ENV}/narcissus/s3_region}
     events:
       - http:
           path: narcissus-${env:DEPLOY_ENV}
