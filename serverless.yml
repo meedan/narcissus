@@ -4,7 +4,7 @@ frameworkVersion: ">=2.4.0"
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs18.x
   memorySize: 2560
   timeout: 30
   apiKeys:
