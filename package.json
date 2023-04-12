@@ -21,7 +21,7 @@
     "test:coverage": "npm run cov:before && cp src/config.js.example src/config.js && npm run lint && npm run babel && npm run test && npm run cov:after"
   },
   "dependencies": {
-    "aws-sdk": "^2.814.0",
+    "aws-sdk": "^2.1356.0",
     "chrome-aws-lambda": "^5.3.1",
     "express": "^4.17.3",
     "puppeteer": "^5.3.1",
