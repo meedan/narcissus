@@ -43,7 +43,9 @@ RUN apt-get update -qq && \
         libxtst6 \
         lsb-release \
         wget \
-        xdg-utils
+        xdg-utils \
+        libdrm2 \
+        libgbm-dev
 RUN rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
 RUN groupadd -r narcissus
