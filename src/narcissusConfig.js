@@ -1,3 +1,9 @@
+const fs = require('fs');
+
+if (!fs.existsSync('config.js')) {
+  fs.writeFileSync('config.js', JSON.stringify({}))
+}
+
 const config = require('./config');
 
 const narcissusConfig = {
