@@ -1,10 +1,9 @@
 const fs = require('fs');
+let config = {};
 
-if (!fs.existsSync('config.js')) {
-  fs.writeFileSync('config.js', JSON.stringify({}))
+if (fs.existsSync('config.js')) {
+  config = require('./config');
 }
-
-const config = require('./config');
 
 const narcissusConfig = {
   get: (key, fallback) => {
