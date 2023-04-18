@@ -1,4 +1,4 @@
-FROM node:16-slim
+FROM node:12-slim
 
 WORKDIR /app
 
@@ -43,9 +43,7 @@ RUN apt-get update -qq && \
         libxtst6 \
         lsb-release \
         wget \
-        xdg-utils \
-        libdrm2 \
-        libgbm-dev
+        xdg-utils
 RUN rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
 RUN groupadd -r narcissus

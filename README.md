@@ -22,12 +22,6 @@ Use Serverless by running `npm run deploy`.
 
 Just run `npm run test` or `make test` to run in a Docker image.
 
-## Calling the API
-
-```
-curl -X GET -H 'X-Api-Key: :key' http://host/?url=:url&selector=:selector
-```
-
 ## TODO
 
 * Compress images
