@@ -1,7 +1,6 @@
-const fs = require('fs');
 let config = {};
-
-if (fs.existsSync('config.js')) {
+if (process.env.DEPLOY_ENV === 'local') {
+  // eslint-disable-next-line global-require
   config = require('./config');
 }
 
