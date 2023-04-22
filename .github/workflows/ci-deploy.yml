@@ -32,7 +32,7 @@ jobs:
         npm run clean
         npm install &> '/dev/null'
         FILENAME='lambda_function.zip'
-        zip -q -r "${FILENAME}" node_modules/* src/* package.json -x node_modules/puppeteer/.local-chromium/*
+        zip -q "${FILENAME}" -r "node_modules/**" "src/**" "package.json" -x "node_modules/puppeteer/.local-chromium/**"
         aws s3api put-object --bucket ${{ secrets.AWS_S3_LAMBDA_BUCKET }} --key "qa/narcissus/${FILENAME}" --body "${FILENAME}"
 
     - name: Send GitHub Action trigger data to Slack workflow
