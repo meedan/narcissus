@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  upload-lambda-to-s3:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,7 +36,7 @@ jobs:
     - name: Notify Slack
       id: slack-notify
       uses: 8398a7/action-slack@v3
-      if: ${{ success() }}
+      if: ${{ always() }}
       with:
         status: custom
         fields: workflow,job,commit,repo,ref,author,took,message
@@ -49,3 +49,9 @@ jobs:
           }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Send GitHub Action trigger data to Slack workflow
+      id: slack-api-notify
+      uses: slackapi/slack-github-action@v1.23.0
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.ITS_BOTS_SLACK_WEBHOOK_URL }}
