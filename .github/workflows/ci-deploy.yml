@@ -29,29 +29,28 @@ jobs:
     - name: Upload .zip
       id: upload-zip
       run: |
-        npm run clean && npm i
+        npm run clean
+        npm install &> '/dev/null'
         zip -r lambda_function.zip node_modules/* src/*
         aws s3api put-object --bucket ${{ secrets.AWS_S3_LAMBDA_BUCKET }} --key qa/narcissus/lambda_function.zip
-
-    - name: Notify Slack
-      id: slack-notify
-      uses: 8398a7/action-slack@v3
-      if: ${{ always() }}
-      with:
-        status: custom
-        fields: workflow,job,commit,repo,ref,author,took,message
-        custom_payload: |
-          {
-            attachments: [{
-              color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-              text: `${process.env.AS_WORKFLOW}\n${process.env.AS_MESSAGE} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO} @ ${process.env.AS_REF}\nby ${process.env.AS_AUTHOR}\n${{ job.status }} in ${process.env.AS_TOOK}`,
-            }]
-          }
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     - name: Send GitHub Action trigger data to Slack workflow
       id: slack-api-notify
       uses: slackapi/slack-github-action@v1.23.0
+      with:
+         payload: |
+          {
+            "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                }
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.ITS_BOTS_SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
