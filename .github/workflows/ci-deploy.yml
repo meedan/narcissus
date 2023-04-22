@@ -30,9 +30,10 @@ jobs:
       id: upload-zip
       run: |
         npm run clean
-        npm install &> '/dev/null'
+        npm install
         FILENAME='lambda_function.zip'
-        zip -r "${FILENAME}" "node_modules/*" "src/*" "package.json" -x "node_modules/puppeteer/.local-chromium/*"
+        zip -r "${FILENAME}" node_modules/* src/* "package.json" -x 'node_modules/puppeteer/.local-chromium/*' 'src/test*'
+        echo zip -r "${FILENAME}" "node_modules/*" "src/*" "package.json" -x "node_modules/puppeteer/.local-chromium/*"
         aws s3api put-object --bucket ${{ secrets.AWS_S3_LAMBDA_BUCKET }} --key "qa/narcissus/${FILENAME}" --body "${FILENAME}"
 
     - name: Send GitHub Action trigger data to Slack workflow
@@ -48,7 +49,7 @@ jobs:
                 "fields": [
                   {
                     "type": "mrkdwn",
-                    "text": "Kicked off by: ${{ github.triggering_actor }}\nWorkflow: https://github.com/meedan/narcissus/actions/runs/${{ github.run_id }}/jobs/${{ github.job }}"
+                    "text": "Kicked off by: ${{ github.triggering_actor }}\nWorkflow: https://github.com/meedan/narcissus/actions/runs/${{ github.run_id }}"
                   }
                 ]
               },
