@@ -1,0 +1,46 @@
+name: Build and Upload Archive
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: eu-west-1
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.5.2
+
+    - name: Upload .zip
+      id: upload-zip
+      run: |
+        npm run clean && npm i
+        zip -r lambda_function.zip node_modules/* src/*
+        aws s3api put-object --bucket ${{ secrets.AWS_S3_LAMBDA_BUCKET }} --key qa/narcissus/lambda_function.zip
+
+    - name: Notify Slack
+      id: slack-notify
+      uses: 8398a7/action-slack@v3
+      if: ${{ always() }}
+      with:
+        status: custom
+        fields: workflow,job,commit,repo,ref,author,took,message
+        custom_payload: |
+          {
+            attachments: [{
+              color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+              text: `${process.env.AS_WORKFLOW}\n${process.env.AS_MESSAGE} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO} @ ${process.env.AS_REF}\nby ${process.env.AS_AUTHOR}\n${{ job.status }} in ${process.env.AS_TOOK}`,
+            }]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
