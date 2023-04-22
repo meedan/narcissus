@@ -31,8 +31,9 @@ jobs:
       run: |
         npm run clean
         npm install &> '/dev/null'
-        zip -r lambda_function.zip node_modules/* src/*
-        aws s3api put-object --bucket ${{ secrets.AWS_S3_LAMBDA_BUCKET }} --key qa/narcissus/lambda_function.zip
+        FILENAME='lambda_function.zip'
+        zip -r "${FILENAME}" .zip node_modules/* src/*
+        aws s3api put-object --bucket ${{ secrets.AWS_S3_LAMBDA_BUCKET }} --key "qa/narcissus/${FILENAME}" --body "${FILENAME}"
 
     - name: Send GitHub Action trigger data to Slack workflow
       id: slack-api-notify
