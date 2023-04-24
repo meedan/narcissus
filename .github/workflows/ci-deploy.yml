@@ -52,7 +52,7 @@ jobs:
                   }
                 ]
               }
-            ]
+            ],
             "attachments": [
               {
                 "color": "#FF0000",
