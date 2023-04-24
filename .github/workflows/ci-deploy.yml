@@ -51,21 +51,21 @@ jobs:
                     "text": "Kicked off by: ${{ github.triggering_actor }}\nWorkflow: https://github.com/meedan/narcissus/actions/runs/${{ github.run_id }}"
                   }
                 ]
-              },
-	      "attachments": [
-                {
-                  "color": "#FF0000",
-                  "blocks": [
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "Result: ${{ job.status }}\nNarcissus Deploy:\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                      }
+              }
+            ]
+            "attachments": [
+              {
+                "color": "#FF0000",
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "Result: ${{ job.status }}\nNarcissus Deploy:\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
                     }
-                  ]
-                }
-              ]
+                  }
+                ]
+              }
             ]
           }
       env:
