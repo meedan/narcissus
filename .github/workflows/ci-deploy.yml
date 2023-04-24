@@ -36,23 +36,46 @@ jobs:
         echo zip -r "${FILENAME}" "node_modules/*" "src/*" "package.json" -x "node_modules/puppeteer/.local-chromium/*"
         aws s3api put-object --bucket ${{ secrets.AWS_S3_LAMBDA_BUCKET }} --key "qa/narcissus/${FILENAME}" --body "${FILENAME}"
 
-    - name: Send GitHub Action trigger data to Slack workflow
-      id: slack-api-notify
+    - name: Send GitHub Action trigger data to Slack workflow on success
+      id: slack-api-notify-success
+      if: ${{ success() }}
       uses: slackapi/slack-github-action@v1.23.0
       with:
          payload: |
           {
-            "blocks": [
+            "attachments": [
               {
-                "type": "section",
-                "fields": [
+                "color": "#00FF00",
+                "blocks": [
                   {
-                    "type": "mrkdwn",
-                    "text": "Kicked off by: ${{ github.triggering_actor }}\nWorkflow: https://github.com/meedan/narcissus/actions/runs/${{ github.run_id }}"
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "Kicked off by: ${{ github.triggering_actor }}\nWorkflow: https://github.com/meedan/narcissus/actions/runs/${{ github.run_id }}"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "Narcissus Deploy:\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                    }
                   }
                 ]
               }
-            ],
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.ITS_BOTS_SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+    - name: Send GitHub Action trigger data to Slack workflow on failure
+      id: slack-api-notify-failure
+      if: ${{ failure() }}
+      uses: slackapi/slack-github-action@v1.23.0
+      with:
+         payload: |
+          {
             "attachments": [
               {
                 "color": "#FF0000",
@@ -61,7 +84,7 @@ jobs:
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": "Result: ${{ job.status }}\nNarcissus Deploy:\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                      "text": "Narcissus Deploy failed\nWorkflow: https://github.com/meedan/narcissus/actions/runs/${{ github.run_id }}"
                     }
                   }
                 ]
