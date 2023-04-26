@@ -2,7 +2,10 @@ FROM node:12-slim
 
 WORKDIR /app
 
-RUN apt-get update -qq && \
+RUN rm -rf /etc/apt/sources.list.d/* && \
+    echo 'deb http://archive.debian.org/debian/ stretch main contrib non-free' > /etc/apt/sources.list && \
+    echo 'deb http://archive.debian.org/debian-security/ stretch/updates main contrib non-free' >> /etc/apt/sources.list && \
+    apt-get update -qq && \
     apt-get install --no-install-recommends -y \
         ca-certificates \
         curl \
