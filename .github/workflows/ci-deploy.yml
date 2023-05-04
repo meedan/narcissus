@@ -1,0 +1,96 @@
+name: Build and Upload Archive (QA)
+
+on:
+  push:
+    branches:
+      - develop
+      - dmou/build-upload-archive
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  upload-lambda-to-s3:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+        aws-region: eu-west-1
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.5.2
+
+    - name: Upload .zip
+      id: upload-zip
+      run: |
+        npm run clean
+        npm install
+        FILENAME='lambda_function.zip'
+        zip -r "${FILENAME}" node_modules/* src/* "package.json" -x 'node_modules/puppeteer/.local-chromium/*' 'src/test*'
+        echo zip -r "${FILENAME}" "node_modules/*" "src/*" "package.json" -x "node_modules/puppeteer/.local-chromium/*"
+        aws s3api put-object --bucket ${{ secrets.AWS_S3_LAMBDA_BUCKET }} --key "qa/narcissus/${FILENAME}" --body "${FILENAME}"
+
+    - name: Send GitHub Action trigger data to Slack workflow on success
+      id: slack-api-notify-success
+      if: ${{ success() }}
+      uses: slackapi/slack-github-action@v1.23.0
+      with:
+         payload: |
+          {
+            "attachments": [
+              {
+                "color": "#00FF00",
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "Kicked off by: ${{ github.triggering_actor }}\nWorkflow: https://github.com/meedan/narcissus/actions/runs/${{ github.run_id }}"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "Narcissus Deploy:\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.ITS_BOTS_SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+    - name: Send GitHub Action trigger data to Slack workflow on failure
+      id: slack-api-notify-failure
+      if: ${{ failure() }}
+      uses: slackapi/slack-github-action@v1.23.0
+      with:
+         payload: |
+          {
+            "attachments": [
+              {
+                "color": "#FF0000",
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "Narcissus Deploy failed\nWorkflow: https://github.com/meedan/narcissus/actions/runs/${{ github.run_id }}"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.ITS_BOTS_SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
