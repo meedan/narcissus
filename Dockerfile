@@ -1,11 +1,8 @@
-FROM node:12-slim
+FROM node:14.21.3-bullseye AS base
 
 WORKDIR /app
 
-RUN rm -rf /etc/apt/sources.list.d/* && \
-    echo 'deb http://archive.debian.org/debian/ stretch main contrib non-free' > /etc/apt/sources.list && \
-    echo 'deb http://archive.debian.org/debian-security/ stretch/updates main contrib non-free' >> /etc/apt/sources.list && \
-    apt-get update -qq && \
+RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
         ca-certificates \
         curl \
@@ -27,7 +24,8 @@ RUN rm -rf /etc/apt/sources.list.d/* && \
         libgdk-pixbuf2.0-0 \
         libglib2.0-0 \
         libgtk-3-0 \
-        libnspr4 libnss3 \
+        libnspr4 \
+        libnss3 \
         libpango-1.0-0 \
         libpangocairo-1.0-0 \
         libstdc++6 \
@@ -46,8 +44,9 @@ RUN rm -rf /etc/apt/sources.list.d/* && \
         libxtst6 \
         lsb-release \
         wget \
-        xdg-utils
-RUN rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
+        xdg-utils && \
+    rm -rf /var/lib/apt/lists/*
+
 
 RUN groupadd -r narcissus
 RUN useradd -ms /bin/bash -g narcissus narcissus
